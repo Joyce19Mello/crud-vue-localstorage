@@ -4,13 +4,15 @@
 
 <div id="app">
   <form>
-    <label for="data">Data</label>
-    <textarea id="data" v-model="dataJSON"></textarea>
+    <label for="key">Chave</label>
+    <input type="text" id="key" v-model="currentKey">
+    <label for="value">Valor</label>
+    <input type="text" id="value" v-model="currentValue">
     <button type="button" @click="addData">Adicionar</button>
-    <button type="button" @click="editData">Editar</button>
-    <button type="button" @click="deleteData">Excluir</button>
+    <button type="button" @click="updateData">Atualizar</button>
+    <button type="button" @click="removeData">Remover</button>
   </form>
-  
+
   <table>
     <thead>
       <tr>
@@ -26,7 +28,6 @@
     </tbody>
   </table>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
 <script>
@@ -34,34 +35,25 @@
   new Vue({
     el: '#app',
     data: {
-      dataJSON: '',
+      currentKey: '',
+      currentValue: '',
       localStorageKey: 'data'
     },
     computed: {
       dataObject() {
-        // Analise o JSON e retorne um objeto
-        return JSON.parse(this.dataJSON)
-      }
-    },
-    mounted() {
-      // Recupere os dados do Local Storage e atribua-os ao campo de texto
-      const dataFromLocalStorage = localStorage.getItem(this.localStorageKey)
-      if (dataFromLocalStorage) {
-        this.dataJSON = dataFromLocalStorage
+        // Recupere os dados do Local Storage e retorne um objeto
+        const dataFromLocalStorage = localStorage.getItem(this.localStorageKey)
+        return dataFromLocalStorage ? JSON.parse(dataFromLocalStorage) : {}
       }
     },
     methods: {
       addData() {
-        // Analise o JSON e salve-o no Local Storage
-        const dataObject = JSON.parse(this.dataJSON)
-        localStorage.setItem(this.localStorageKey, JSON.stringify(dataObject))
-      },
-      editData() {
-        // Analise o JSON, atualize os dados correspondentes e salve-os no Local Storage
-        const dataObject = JSON.parse(this.dataJSON)
-        const dataInLocalStorage = JSON.parse(localStorage.getItem(this.localStorageKey))
+        // Adicione os dados ao objeto e salve no Local Storage
+        const dataInLocalStorage = JSON.parse(localStorage.getItem(this.localStorageKey)) || {}
+        dataInLocalStorage[this.currentKey] = this.currentValue
+        localStorage.setItem(this.localStorageKey, JSON.stringify(dataInLocalStorage))
+        this.clearFields()
       }
     }
   });
-</script>
-
+</script>  
