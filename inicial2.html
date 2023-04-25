@@ -1,0 +1,67 @@
+<header><!-- Adicione o CSS do Vue -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue/dist/vue.css">
+</header>
+
+<div id="app">
+  <form>
+    <label for="data">Data</label>
+    <textarea id="data" v-model="dataJSON"></textarea>
+    <button type="button" @click="addData">Adicionar</button>
+    <button type="button" @click="editData">Editar</button>
+    <button type="button" @click="deleteData">Excluir</button>
+  </form>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Chave</th>
+        <th>Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(value, key) in dataObject" :key="key">
+        <td>{{ key }}</td>
+        <td>{{ value }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script>
+  // Crie uma nova instância Vue
+  new Vue({
+    el: '#app',
+    data: {
+      dataJSON: '',
+      localStorageKey: 'data'
+    },
+    computed: {
+      dataObject() {
+        // Analise o JSON e retorne um objeto
+        return JSON.parse(this.dataJSON)
+      }
+    },
+    mounted() {
+      // Recupere os dados do Local Storage e atribua-os ao campo de texto
+      const dataFromLocalStorage = localStorage.getItem(this.localStorageKey)
+      if (dataFromLocalStorage) {
+        this.dataJSON = dataFromLocalStorage
+      }
+    },
+    methods: {
+      addData() {
+        // Analise o JSON e salve-o no Local Storage
+        const dataObject = JSON.parse(this.dataJSON)
+        localStorage.setItem(this.localStorageKey, JSON.stringify(dataObject))
+      },
+      editData() {
+        // Analise o JSON, atualize os dados correspondentes e salve-os no Local Storage
+        const dataObject = JSON.parse(this.dataJSON)
+        const dataInLocalStorage = JSON.parse(localStorage.getItem(this.localStorageKey))
+      }
+    }
+  });
+</script>
+
