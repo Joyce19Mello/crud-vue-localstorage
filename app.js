@@ -1,32 +1,24 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Container } from '@material-ui/core';
+import Navbar from './Navbar';
+import HomePage from './HomePage';
+import SobrePage from './SobrePage';
+import ContatoPage from './ContatoPage';
 
-const app = Vue.createApp({
-  data() {
-    return {
-      settings: JSON.parse(localStorage.getItem("settings")) || [],
-      newSetting: { key: "", value: "" },
-      editIndex: null
-    };
-  },
-  methods: {
-    addSetting() {
-      if (this.editIndex !== null) {
-        this.settings.splice(this.editIndex, 1, this.newSetting);
-        this.editIndex = null;
-      } else {
-        this.settings.push(this.newSetting);
-      }
-      this.newSetting = { key: "", value: "" };
-      localStorage.setItem("settings", JSON.stringify(this.settings));
-    },
-    deleteSetting(index) {
-      this.settings.splice(index, 1);
-      localStorage.setItem("settings", JSON.stringify(this.settings));
-    },
-    editSetting(index) {
-      this.newSetting = { ...this.settings[index] };
-      this.editIndex = index;
-    }
-  }
-});
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <Container>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/sobre" component={SobrePage} />
+          <Route exact path="/contato" component={ContatoPage} />
+        </Switch>
+      </Container>
+    </Router>
+  );
+}
 
-app.mount("#app");
+export default App;
